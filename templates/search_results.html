@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <h1>Search Results</h1>
+
+    <div class="turf-container">
+        {% if turfs %}
+            {% for turf in turfs %}
+            <div class="property-card">
+                <div class="property-image-container">
+                    {% if turf_images[turf.turf_id] %}
+                        <img src="data:image/jpeg;base64,{{ turf_images[turf.turf_id] }}" alt="{{ turf.turf_name }}" class="property-image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default_turf.jpg') }}" alt="Default Turf Image" class="property-image">
+                    {% endif %}
+                </div>
+                <div class="property-details">
+                    <span class="property-type">{{ turf.turf_name }}</span>
+                    <span class="property-price">₹{{ turf.price_per_hour }}/hr</span>
+                    <h3 class="property-address">{{ turf.turf_address }}</h3>
+                    <a href="{{ url_for('main.turf_details', turf_id=turf.turf_id) }}" class="schedule-btn">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No turfs found.</p>
+        {% endif %}
+    </div>
+    
+</body>
+</html>

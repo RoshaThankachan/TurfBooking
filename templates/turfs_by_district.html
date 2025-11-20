@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turfs in {{ district }} - TurfBooking</title>
+    <link href="{{ url_for('static', filename='css/turfs_by_district.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <style>
+
+.category-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #e9f2ff;
+    color: #2575fc;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #d0e1f9;
+}
+
+     .search-filter-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Search Box */
+        .search-box-container {
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: white;
+            color: #333;
+        }
+
+        .search-box:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 20px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            position: relative;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #007bff;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .filter-toggle:hover {
+            color: #0056b3;
+        }
+
+        .filter-toggle i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .filter-btn i {
+            font-size: 16px;
+        }
+
+        .filter-panel {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .filter-panel.show {
+            display: block;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        /* Price Range Inputs */
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .price-input {
+            flex: 1;
+            position: relative;
+        }
+
+        .price-input label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+
+        .price-input input {
+            width: 100%;
+            padding: 10px 10px 10px 30px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .price-input input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .price-input i {
+            position: absolute;
+            left: 10px;
+            top: 29px;
+            color: #6c757d;
+        }
+
+        /* Select Inputs */
+        .select-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .select-container label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .select-container select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: white;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .select-container select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        }
+
+        .select-container::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 35px;
+            color: #6c757d;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        /* Button */
+        .filter-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .reset-filter {
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .reset-filter:hover {
+            background-color: #e9ecef;
+        }
+
+        .apply-filter {
+            padding: 12px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .apply-filter:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            .search-filter-container {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .search-box-container {
+                flex: 1;
+                margin-right: 15px;
+            }
+            
+            .filter-section {
+                width: auto;
+            }
+            
+            .filter-panel {
+                position: absolute;
+                width: 350px;
+                right: 0;
+                z-index: 100;
+            }
+        }
+    </style>
+     </style>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>          
+            <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link active">HOME</a></li>
+            <li><a href="/hturfs" class="nav-link">TURFS</a></li>
+            <li><a href="#about" class="nav-link">ABOUT US</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>Turfs in {{ district }}</h1>
+        
+        <div class="search-filter-container">
+            <div class="search-box-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-box" onkeyup="filterTurfs()" placeholder="Search for turfs..." class="search-box">
+            </div>
+            
+            <div class="filter-section">
+                <button class="filter-btn" onclick="document.getElementById('filter-panel').classList.toggle('show')">
+                    <i class="fas fa-filter"></i> Filters
+                </button>
+                
+                <div id="filter-panel" class="filter-panel">
+                    <div class="filter-header">
+                        <span class="filter-title">Filter Options</span>
+                        <span class="filter-toggle" onclick="document.getElementById('filter-panel').classList.toggle('show')">
+                            Close <i class="fas fa-chevron-up"></i>
+                        </span>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-group-title">Price Range</div>
+                        <div class="price-range">
+                            <div class="price-input">
+                                <label for="min-price">Min Price</label>
+                                <i class="fas fa-rupee-sign"></i>
+                                <input type="number" id="min-price" placeholder="0">
+                            </div>
+                            <div class="price-input">
+                                <label for="max-price">Max Price</label>
+                                <i class="fas fa-rupee-sign"></i>
+                                <input type="number" id="max-price" placeholder="5000">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="select-container">
+                            <label for="turf-type-filter">Turf Type</label>
+                            <select id="turf-type-filter">
+                                <option value="">All Types</option>
+                                {% for category in district_categories %}
+                                    <option value="{{ category.cat_id }}">{{ category.cat_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="select-container">
+                            <label for="rating-filter">Minimum Rating</label>
+                            <select id="rating-filter">
+                                <option value="">Any Rating</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4+ Stars</option>
+                                <option value="3">3+ Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="reset-filter" onclick="resetFilters()">Reset</button>
+                        <button class="apply-filter" onclick="applyFilters()">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="turf-list">
+            {% if turfs %}
+                {% for turf in turfs %}
+                <div class="turf-item" data-location="{{ turf.location }}" data-price="{{ turf.price_per_hour }}" data-type="{{ turf.turf_type }}" data-rating="{{ turf.rating }}" onclick="window.location.href='{{ url_for('main.turf_details', turf_id=turf.turf_id) }}'">
+                    <div class="turf-image-container">
+                        {% if turf.images and turf.images|length > 0 %}
+                            <img src="{{ url_for('main.get_turf_image', image_id=turf.images[0].image_id) }}" alt="{{ turf.turf_name }}" class="turf-image">
+                        {% else %}
+                            <div class="turf-icon">
+                                <i class="fas fa-futbol"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="turf-details">
+                        <div class="turf-name">{{ turf.turf_name }}</div>
+                        
+                        <div class="turf-address">{{ turf.turf_address }}</div>
+                        <div class="turf-price">₹{{ turf.price_per_hour }} per hour</div>
+                    </div>
+                    <div class="categories-container">
+                        {% for category in turf.categories %}
+                            <span class="category-badge">{{ category.cat_name }}</span>
+                        {% endfor %}
+                    </div>
+                    <button class="view-button">View Details</button>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-turf-message">
+                    <i class="fas fa-info-circle"></i> No turfs found in {{ district }}.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+         function applyFilters() {
+            let minPrice = document.getElementById('min-price').value;
+            let maxPrice = document.getElementById('max-price').value;
+            let turfType = document.getElementById('turf-type-filter').value;
+            let rating = document.getElementById('rating-filter').value;
+            
+            let turfs = document.getElementsByClassName('turf-item');
+            
+            for (let i = 0; i < turfs.length; i++) {
+                let turf = turfs[i];
+                let turfPrice = parseFloat(turf.dataset.price);
+                let turfRating = turf.dataset.rating;
+                
+                if ((minPrice && turfPrice < minPrice) ||
+                    (maxPrice && turfPrice > maxPrice) ||
+                    (turfType && turf.dataset.type !== turfType) ||
+                    (rating && turfRating < rating)) {
+                    turf.style.display = "none";
+                } else {
+                    turf.style.display = "flex";
+                }
+            }
+            
+            // Close the filter panel after applying
+            document.getElementById('filter-panel').classList.remove('show');
+        }
+        
+        function resetFilters() {
+            document.getElementById('min-price').value = '';
+            document.getElementById('max-price').value = '';
+            document.getElementById('turf-type-filter').value = '';
+            document.getElementById('rating-filter').value = '';
+            
+            // Show all turfs
+            let turfs = document.getElementsByClassName('turf-item');
+            for (let i = 0; i < turfs.length; i++) {
+                turfs[i].style.display = "flex";
+            }
+        }
+        function filterTurfs() {
+            let input = document.getElementById('search-box').value.toLowerCase();
+            let categoryFilter = document.getElementById('turf-type-filter').value;
+            let turfs = document.getElementsByClassName('turf-item');
+            
+            let selectedCategory = categoryFilter === "" ? "" : document.querySelector(`#turf-type-filter option[value='${categoryFilter}']`).innerText.toLowerCase();
+            
+            for (let i = 0; i < turfs.length; i++) {
+                let turfName = turfs[i].getElementsByTagName('h2')[0].innerText.toLowerCase();
+                let turfCategory = turfs[i].dataset.category;
+                
+                let matchesSearch = turfName.includes(input);
+                let matchesCategory = categoryFilter === "" || turfCategory === selectedCategory;
+                
+                if (matchesSearch && matchesCategory) {
+                    turfs[i].style.display = "block";
+                } else {
+                    turfs[i].style.display = "none";
+                }
+            }
+        }
+
+        document.getElementById('turf-type-filter').addEventListener('change', filterTurfs);
+   
+    </script>
+  
+</body>
+</html>

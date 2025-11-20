@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subcategories - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adsub.css') }}" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories" class="active"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Subcategories Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category ID</th>
+                        <th>Category Name</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subcategory in subcategories %}
+                        <tr id="subcategory-{{ subcategory.sub_id }}">
+                            <td>{{ subcategory.sub_id }}</td>
+                            <td>{{ subcategory.cat_id }}</td>
+                            <td>{{ subcategory.cat_name }}</td>
+                            <td>{{ subcategory.sub_name }}</td>
+                            <td class="status">{{ 'Active' if subcategory.sub_status else 'Inactive' }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_bp.view_subcategory', sub_id=subcategory.sub_id) }}" class="btn btn-view">View</a>
+                                <button class="btn btn-toggle-status" data-id="{{ subcategory.sub_id }}" data-status="{{ subcategory.sub_status }}">Toggle Status</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <h2>Add New Subcategory</h2>
+            <form method="post" action="{{ url_for('admin_bp.add_subcategory') }}">
+                <div class="form-group">
+                    <label for="cat_id">Category ID</label>
+                    <select id="cat_id" name="cat_id" required>
+                        {% for category in categories %}
+                            <option value="{{ category.cat_id }}">{{ category.cat_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sub_name">Subcategory Name</label>
+                    <input type="text" id="sub_name" name="sub_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="sub_status">Status</label>
+                    <select id="sub_status" name="sub_status" required>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Subcategory</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const navbar = document.querySelector('.navbar');
+
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                navbar.style.left = 'var(--sidebar-collapsed-width)';
+            } else {
+                navbar.style.left = 'var(--sidebar-width)';
+            }
+        }
+
+        document.querySelectorAll('.btn-toggle-status').forEach(button => {
+            button.addEventListener('click', function() {
+                const subId = this.dataset.id;
+                const statusCell = document.querySelector(`#subcategory-${subId} .status`);
+                fetch(`/admin_panel/toggle_subcategory_status/${subId}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            const newStatus = this.dataset.status === 'true' ? 'Inactive' : 'Active';
+                            statusCell.textContent = newStatus;
+                            this.dataset.status = this.dataset.status === 'true' ? 'false' : 'true';
+                        } else {
+                            alert('Failed to toggle status');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to toggle status');
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

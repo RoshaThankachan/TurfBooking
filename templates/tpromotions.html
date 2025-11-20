@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Promotions Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/tpromotions.css') }}" rel="stylesheet">
+   
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                    <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+            </header>
+
+            <div class="promotions-controls">
+                <div class="search-box">
+                    <input type="text" placeholder="Search promotions...">
+                </div>
+                <button class="add-promotion-btn" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Add New Promotion
+                </button>
+            </div>
+
+            <div class="promotions-grid">
+                <!-- Sample Promotion Items -->
+                <div class="promotion-card">
+                    <div class="promotion-details">
+                        <h3>Summer Sale</h3>
+                        <p>Get 20% off on all turf bookings this summer!</p>
+                    </div>
+                    <div class="promotion-actions">
+                        <button class="action-btn edit-btn" onclick="openModal()">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deletePromotion(this)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="promotion-card">
+                    <div class="promotion-details">
+                        <h3>Weekend Special</h3>
+                        <p>Book two hours and get the third hour free on weekends!</p>
+                    </div>
+                    <div class="promotion-actions">
+                        <button class="action-btn edit-btn" onclick="openModal()">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deletePromotion(this)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Promotion Modal -->
+    <div class="modal" id="promotionModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Add New Promotion</h2>
+            <form id="promotionForm">
+                <div class="form-group">
+                    <label for="promotionName">Promotion Name</label>
+                    <input type="text" id="promotionName" required>
+                </div>
+                <div class="form-group">
+                    <label for="promotionDescription">Description</label>
+                    <textarea id="promotionDescription" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Add Promotion</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function openModal() {
+        document.getElementById('promotionModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('promotionModal').style.display = 'none';
+    }
+
+    function deletePromotion(element) {
+        if (confirm("Are you sure you want to delete this promotion?")) {
+            element.closest('.promotion-card').remove();
+        }
+    }
+
+    document.getElementById('promotionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Here you would typically handle the form submission
+        // For now, we'll just close the modal
+        closeModal();
+    });
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('promotionModal')) {
+            closeModal();
+        }
+    }
+    </script>
+</body>
+</html>

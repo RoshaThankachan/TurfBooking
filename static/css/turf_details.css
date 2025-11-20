@@ -1,0 +1,895 @@
+/* Base styles and resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+    line-height: 1.6;
+}
+
+/* Enhanced Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white; /* Ensure the navbar has a background */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+.navbar-scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.1);
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4CAF50;
+    transition: color 0.3s ease;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.login-btn, .logout-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.logout-btn {
+    background: #ff4444;
+    color: white;
+}
+
+.login-btn:hover, .logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.state-icon {
+    font-size: 2rem;
+    color: #4CAF50;
+   
+    transition: transform 0.3s ease;
+}
+
+/* Turf Details Styles */
+.turf-details {
+    max-width: 900px;
+    margin: 30px auto 60px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.turf-details:hover {
+    transform: translateY(-5px);
+}
+
+.turf-details h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #222;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 6px 15px;
+    background-color: #e9f2ff;
+    color: #2575fc;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #d0e1f9;
+    transition: all 0.3s ease;
+}
+
+.category-badge:hover {
+    background-color: #2575fc;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.turf-details p {
+    margin: 15px 0;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.turf-details strong {
+    font-weight: 600;
+    color: #444;
+}
+
+#image-container {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    margin: 25px 0;
+    position: relative;
+}
+
+#slideshow-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+#slideshow-image:hover {
+    transform: scale(1.05);
+}
+
+.book-now-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background-color: #2575fc;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 25px;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 117, 252, 0.2);
+}
+
+.book-now-btn:hover {
+    background-color: #1a60d6;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(37, 117, 252, 0.3);
+}
+
+/* Amenities Section */
+.amenities-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8faff;
+    border-radius: 10px;
+    border-left: 4px solid #2575fc;
+}
+
+.amenities-section h3 {
+    font-size: 20px;
+    color: #2575fc;
+    margin-bottom: 15px;
+}
+
+.amenities-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.amenity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.amenity-icon {
+    color: #2575fc;
+    font-size: 18px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 30px;
+    border: none;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.4s;
+}
+
+@keyframes modalFadeIn {
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.close:hover,
+.close:focus {
+    color: #2575fc;
+    text-decoration: none;
+    cursor: pointer;
+    transform: rotate(90deg);
+}
+
+.modal-content h2 {
+    color: #2575fc;
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+    font-size: 15px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: #2575fc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+}
+
+.form-group .total-amount {
+    font-weight: bold;
+    font-size: 20px;
+    color: #2575fc;
+    padding: 10px;
+    background-color: #f0f7ff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Time slot styling */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.time-slot {
+    padding: 10px;
+    text-align: center;
+    background-color: #f0f7ff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.time-slot:hover {
+    background-color: #d0e6ff;
+}
+
+.time-slot.available {
+    border: 1px solid #2575fc;
+    color: #2575fc;
+}
+
+.time-slot.booked {
+    background-color: #ffeeee;
+    border: 1px solid #ff5252;
+    color: #ff5252;
+    cursor: not-allowed;
+}
+
+.time-slot.selected {
+    background-color: #2575fc;
+    color: white;
+    border: 1px solid #1a60d6;
+}
+
+/* Available Sports Section */
+.sports-section {
+    margin-top: 20px;
+}
+
+.sports-section h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.sports-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sport-tag {
+    padding: 8px 15px;
+    background-color: #f0f7ff;
+    border-radius: 30px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.sport-tag:hover {
+    background-color: #2575fc;
+    color: white;
+}
+
+.sport-icon {
+    font-size: 16px;
+}
+
+/* Facilities Section */
+.facilities-section {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.facilities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.facilities-header h3 {
+    font-size: 18px;
+    color: #333;
+}
+
+.facilities-content {
+    padding: 15px;
+    background-color: #f8faff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Venue Rules Section */
+.venue-rules {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff9e6;
+    border-radius: 10px;
+    border-left: 4px solid #ffc107;
+}
+
+.venue-rules h3 {
+    color: #e6a800;
+    margin-bottom: 15px;
+}
+
+.rules-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.rules-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0e9d0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.rules-list li:last-child {
+    border-bottom: none;
+}
+
+.rule-icon {
+    color: #ffc107;
+    margin-top: 2px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 10px;
+    }
+    
+    .nav-link {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    .turf-details {
+        padding: 20px;
+    }
+    
+    .turf-details h1 {
+        font-size: 26px;
+    }
+    
+    #image-container {
+        height: 300px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .amenities-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+/* Available Slots Styling */
+.available-slots-section {
+    margin-top: 30px;
+}
+
+.available-slots-section h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.slots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.slot {
+    padding: 12px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.slot.available {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.slot.booked {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.slot.available:hover {
+    background-color: #c8e6c9;
+    transform: translateY(-2px);
+}
+
+/* Calendar Styling */
+.calendar-section {
+    margin-top: 30px;
+}
+
+.date-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #2575fc #f0f7ff;
+}
+
+.date-slider::-webkit-scrollbar {
+    height: 8px;
+}
+
+.date-slider::-webkit-scrollbar-track {
+    background: #f0f7ff;
+    border-radius: 10px;
+}
+
+.date-slider::-webkit-scrollbar-thumb {
+    background-color: #2575fc;
+    border-radius: 10px;
+}
+
+.date-card {
+    min-width: 80px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.date-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.date-card.selected {
+    background-color: #2575fc;
+    color: white;
+}
+
+.date-day {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #777;
+}
+
+.date-card.selected .date-day {
+    color: #d0e6ff;
+}
+
+.date-num {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.date-month {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #777;
+}
+
+.date-card.selected .date-month {
+    color: #d0e6ff;
+}
+
+/* Ground policies accordion styling */
+.ground-policies {
+    margin-top: 30px;
+}
+
+.accordion-header {
+    padding: 15px;
+    background-color: #f8faff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.accordion-header:hover {
+    background-color: #edf3ff;
+}
+
+.accordion-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion-icon.open {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    margin-top: -5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    display: none;
+}
+
+.accordion-content.open {
+    display: block;
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer styling */
+footer {
+    background-color: #2a2e43;
+    color: #f5f5f5;
+    padding: 60px 0 30px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+}
+
+.footer-column h3:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 40px;
+    height: 3px;
+    background-color: #2575fc;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #b0b5c3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: white;
+    transform: translateX(5px);
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #2575fc;
+    transform: translateY(-5px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #b0b5c3;
+}
+.turf-details {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.turf-details h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+.turf-details p {
+    margin: 10px 0;
+}
+.turf-details img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+.book-now-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2575fc;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.category-badge {
+display: inline-block;
+padding: 6px 12px;
+background-color: #e9f2ff;
+color: #2575fc;
+border-radius: 20px;
+font-size: 14px;
+font-weight: 500;
+border: 1px solid #d0e1f9;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    border-radius: 10px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.form-group .total-amount {
+    font-weight: bold;
+}
+.turf-time {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.turf-time i {
+    color: #ff9800;
+    font-size: 20px;
+}

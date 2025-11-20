@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booked Turfs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/cbook.css') }}" rel="stylesheet">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <div class="badge">3</div>
+                </div>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                    <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+                </div>
+               
+            </div>
+        </div>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <h1>Booked Turfs</h1>
+            <table>
+                <tr>
+                    <th data-label="Booking ID">Booking ID</th>
+                    <th data-label="Turf Name">Turf Name</th>
+                    <th data-label="Customer Name">Customer Name</th>
+                    <th data-label="Date">Date</th>
+                    <th data-label="Time Slot">Time Slot</th>
+                    <th data-label="Amount">Amount</th>
+                    <th data-label="Status">Status</th>
+                    <th data-label="Special Requests">Special Requests</th>
+                </tr>
+                {% for booking in bookings %}
+                <tr>
+                    <td data-label="Booking ID">{{ booking.booking_id }}</td>
+                    <td data-label="Turf Name">{{ booking.turf_name }}</td>
+                    <td data-label="Customer Name">{{ booking.customer_name }}</td>
+                    <td data-label="Date">{{ booking.date }}</td>
+                    <td data-label="Time Slot">{{ booking.time_slot }}</td>
+                    <td data-label="Amount">{{ booking.amount }}</td>
+                    <td data-label="Status">{{ booking.status }}</td>
+                    <td data-label="Special Requests">{{ booking.special_requests }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </div>
+</body>
+</html>

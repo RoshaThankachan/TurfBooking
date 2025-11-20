@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurfBooking - Login & Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/log.css') }}" rel="stylesheet">
+  
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>
+            <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main.home') }}#top" class="nav-link active">HOME</a></li>
+<li><a href="{{ url_for('main.home') }}#about" class="nav-link">ABOUT US</a></li>
+<li><a href="{{ url_for('main.home') }}#contact" class="nav-link">CONTACT</a></li>
+
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <div class="form-content">
+                <div class="logo">
+                    <i class="fas fa-futbol state-icon"></i>
+                    <span class="logo-text">TurfBooking</span>
+                </div>
+                <h1>Create Account</h1>
+                
+                <form method="POST" action="/signup">
+                    <div class="form-group">
+                        <select name="user_type" id="user_type" required>
+                            <option value="" disabled selected>Register as</option>
+                            <option value="customer">Customer</option>
+                            <option value="turf_owner">Turf Owner</option>
+                        </select>
+                    </div>
+
+                    <input type="text" name="username" placeholder="Username" required />
+
+                    <div class="password-container">
+                        <input type="password" id="password-signup" name="password" placeholder="Password" required />
+                        <i class="fas fa-eye" id="toggle-password-signup"></i>
+                    </div>
+
+                    <div class="password-container">
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required />
+                        <i class="fas fa-eye" id="toggle-confirm-password"></i>
+                    </div>
+
+                    <div class="name-row">
+                        <input type="text" name="first_name" placeholder="First Name" required />
+                        <input type="text" name="last_name" placeholder="Last Name" required />
+                    </div>
+
+                    <input type="tel" name="phone" placeholder="Phone Number" required />
+                    <input type="text" name="house_name" placeholder="House Name" required />
+
+                    <div class="address-row">
+                        <input type="text" name="street" placeholder="Street" required />
+                        <input type="text" name="district" placeholder="District" required />
+                    </div>
+
+                    <input type="text" name="pin_code" placeholder="Pin Code" required />
+
+                    <div class="form-group">
+                        <select name="gender" id="gender" required>
+                            <option value="" disabled selected>Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Sign Up</button>
+                </form>
+                <div class="mobile-toggle">
+                    <p>Already have an account? <a href="#" id="signIn-mobile">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="form-container sign-in">
+            <div class="form-content">
+               
+                <h1>Sign In</h1>
+                
+                <form method="POST" action="/login" onsubmit="showLoading()">
+                    <input type="text" name="username" placeholder="Username" required />
+                    <div class="password-container">
+                        <input type="password" id="password-signin" name="password" placeholder="Password" required />
+                        <i class="fas fa-eye" id="toggle-password-signin"></i>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div id="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Redirecting ...</p>
+                </div>
+                <div class="mobile-toggle">
+                    <p>Don't have an account? <a href="#" id="signUp-mobile">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <div class="logo">
+                        <i class="fas fa-futbol state-icon"></i>
+                        <span class="logo-text">TurfBooking</span>
+                    </div>
+                    <h1>Create Account</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <div class="logo">
+                        <i class="fas fa-futbol state-icon"></i>
+                        <span class="logo-text">TurfBooking</span>
+                    </div>
+                    <h1>Ready to Play?</h1>
+                    <p>Sign up now and reserve your turf in just a few clicks!</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between sign in and sign up
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const signUpMobileButton = document.getElementById('signUp-mobile');
+        const signInMobileButton = document.getElementById('signIn-mobile');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add('active');
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove('active');
+        });
+
+        if (signUpMobileButton) {
+            signUpMobileButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                container.classList.add('active');
+            });
+        }
+
+        if (signInMobileButton) {
+            signInMobileButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                container.classList.remove('active');
+            });
+        }
+
+        // Toggle password visibility for sign in
+        const togglePasswordSignin = document.getElementById("toggle-password-signin");
+        const passwordInputSignin = document.getElementById("password-signin");
+
+        togglePasswordSignin.addEventListener("click", function() {
+            togglePasswordVisibility(passwordInputSignin, this);
+        });
+
+        // Toggle password visibility for sign up
+        const togglePasswordSignup = document.getElementById("toggle-password-signup");
+        const passwordInputSignup = document.getElementById("password-signup");
+        const toggleConfirmPassword = document.getElementById("toggle-confirm-password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+
+        togglePasswordSignup.addEventListener("click", function() {
+            togglePasswordVisibility(passwordInputSignup, this);
+        });
+
+        toggleConfirmPassword.addEventListener("click", function() {
+            togglePasswordVisibility(confirmPasswordInput, this);
+        });
+
+        function togglePasswordVisibility(input, icon) {
+            const type = input.type === "password" ? "text" : "password";
+            input.type = type;
+            icon.classList.toggle("fa-eye-slash");
+        }
+
+        // Show loading animation on form submit
+        function showLoading() {
+            document.getElementById("loading").style.display = "block";
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
+

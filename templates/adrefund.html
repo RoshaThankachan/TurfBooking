@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policies - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adrefund.css') }}" rel="stylesheet">
+</head>
+<body>
+     <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments" class="active"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Refund Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                   
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="main-content">
+        <h1>Refund Policies</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+        <!-- Add/Edit Refund Policy Form -->
+        <form action="/admin_panel/refunds" method="POST">
+            <input type="hidden" id="policy_id" name="policy_id">
+            
+            <label>Cancellation Time Range:</label>
+            <input type="text" name="cancellation_time_range" required>
+
+            <label>Refund Percentage (%):</label>
+            <input type="number" name="refund_percentage" step="0.01" required>
+
+            <label>Processing Fee:</label>
+            <input type="number" name="processing_fee" step="0.01">
+
+            <label>Applies To:</label>
+            <select name="applies_to" required>
+                <option value="Customer">Customer</option>
+                <option value="Admin">Admin</option>
+                <option value="Both">Both</option>
+            </select>
+
+            <label>Reason Allowed:</label>
+            <textarea name="reason_allowed"></textarea>
+
+            <button type="submit">Save Policy</button>
+        </form>
+
+        <!-- Display Refund Policies -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Policy ID</th>
+                    <th>Cancellation Time Range</th>
+                    <th>Refund %</th>
+                    <th>Processing Fee</th>
+                    <th>Applies To</th>
+                    <th>Reason</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for policy in refund_policies %}
+                <tr>
+                    <td>{{ policy.policy_id }}</td>
+                    <td>{{ policy.cancellation_time_range }}</td>
+                    <td>{{ policy.refund_percentage }}%</td>
+                    <td>₹{{ policy.processing_fee }}</td>
+                    <td>{{ policy.applies_to }}</td>
+                    <td>{{ policy.reason_allowed or 'N/A' }}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editPolicy({{ policy.policy_id }}, '{{ policy.cancellation_time_range }}', '{{ policy.refund_percentage }}', '{{ policy.processing_fee }}', '{{ policy.applies_to }}', '{{ policy.reason_allowed }}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                                            </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function editPolicy(id, timeRange, percentage, fee, appliesTo, reason) {
+            document.getElementById("policy_id").value = id;
+            document.querySelector("input[name='cancellation_time_range']").value = timeRange;
+            document.querySelector("input[name='refund_percentage']").value = percentage;
+            document.querySelector("input[name='processing_fee']").value = fee;
+            document.querySelector("select[name='applies_to']").value = appliesTo;
+            document.querySelector("textarea[name='reason_allowed']").value = reason || "";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhonePe UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #5F259F;
+            color: white;
+            text-align: center;
+            flex-direction: column;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px;
+            color: black;
+        }
+        .profile-symbol {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #5F259F;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px auto;
+        }
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .phone {
+            color: gray;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .amount {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: black;
+        }
+        .pay-btn {
+            display: block;
+            width: 100%;
+            background: #5F259F;
+            color: white;
+            font-size: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .pay-btn:hover {
+            background: #4a1d7d;
+        }
+        .success-container {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .success-container img {
+            width: 100px;
+        }
+    </style>
+    <script>
+        function showSuccessScreen() {
+            document.querySelector('.container').style.display = 'none';
+            document.querySelector('.success-container').style.display = 'block';
+            setTimeout(function() {
+                window.location.href = 'payment_confirmation.html';
+            }, 10000);
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2>Payment Options</h2>
+        <p>Secure UPI Payment</p>
+    </div>
+    <div class="container">
+        <div class="profile-symbol">{{ first_letter }}</div>
+        <div class="name">Paying {{ full_name }}</div>
+        <div class="phone">+91 {{ masked_phone }}</div>
+        <div class="amount">₹{{ amount }}</div>
+        
+        <a href="{{ url_for('main.phonepe', booking_id=booking_id) }}">
+            <img src="{{ url_for('static', filename='images/phonepe.svg') }}" alt="PHONEPE" class="property-image">
+        </a>
+        
+        <form action="{{ url_for('main.process_phonepe_payment', booking_id=booking_id) }}" method="post">
+            <button type="submit" class="pay-btn">Proceed to Pay with PhonePe</button>
+        </form>
+            </div>
+   
+</body>
+</html>

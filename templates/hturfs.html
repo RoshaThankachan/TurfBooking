@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Turfs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hturfs.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>          
+              <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link active">HOME</a></li>
+            <li><a href="/hturfs" class="nav-link">TURFS</a></li>
+            <li><a href="#about" class="nav-link">ABOUT US</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="container">
+        <h1>All Turfs</h1>
+        <div class="turfs-list">
+            {% for turf in turfs %}
+                <div class="turf-card">
+                    <div class="turf-details">
+                        {% if turf.turf_image %}
+                            <img src="data:image/jpeg;base64,{{ turf.turf_image | b64encode }}" alt="{{ turf.turf_name }}" class="turf-image">
+                        {% endif %}
+                        <h2>{{ turf.turf_name }}</h2>
+                        <p><strong>Owner ID:</strong> {{ turf.owner_id }}</p>
+                        
+                        <!-- Display Categories -->
+                        <p><strong>Categories:</strong>
+                            {% if turf.categories %}
+                                {% for category in turf.categories %}
+                                    {{ category.cat_name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                No categories assigned
+                            {% endif %}
+                        </p>
+        
+                        <!-- Display Subcategories -->
+                        <p><strong>Subcategories:</strong>
+                            {% if turf.subcategories %}
+                                {% for subcategory in turf.subcategories %}
+                                    {{ subcategory.sub_name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                No subcategories assigned
+                            {% endif %}
+                        </p>
+        
+                        <p><strong>Phone Number:</strong> {{ turf.turf_phno }}</p>
+                        <p><strong>Address:</strong> {{ turf.turf_address }}</p>
+                        <p><strong>Street:</strong> {{ turf.turf_street }}</p>
+                        <p><strong>District:</strong> {{ turf.turf_dist }}</p>
+                        <p><strong>PIN:</strong> {{ turf.turf_pin }}</p>
+                        <p><strong>Price per Hour:</strong> ₹{{ turf.price_per_hour }}</p>
+                        <p><strong>Description:</strong> {{ turf.turf_desc }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div> 
+    </div>
+</body>
+</html>

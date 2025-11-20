@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adcat.css') }}" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories" class="active"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Categories Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Actions</th> <!-- Add Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr id="category-{{ category.cat_id }}">
+                            <td>{{ category.cat_id }}</td>
+                            <td>{{ category.cat_name }}</td>
+                            <td class="status">{{ 'Active' if category.cat_status else 'Inactive' }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_bp.view_category', cat_id=category.cat_id) }}" class="btn btn-view">View</a>
+                                <button class="btn btn-toggle-status" data-id="{{ category.cat_id }}" data-status="{{ category.cat_status }}">Toggle Status</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <h2>Add New Category</h2>
+            <form method="post" action="{{ url_for('admin_bp.add_category') }}">
+                <div class="form-group">
+                    <label for="cat_name">Category Name</label>
+                    <input type="text" id="cat_name" name="cat_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="cat_status">Status</label>
+                    <select id="cat_status" name="cat_status" required>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const navbar = document.querySelector('.navbar');
+
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                navbar.style.left = 'var(--sidebar-collapsed-width)';
+            } else {
+                navbar.style.left = 'var(--sidebar-width)';
+            }
+        }
+
+        document.querySelectorAll('.btn-toggle-status').forEach(button => {
+            button.addEventListener('click', function() {
+                const catId = this.dataset.id;
+                const statusCell = document.querySelector(`#category-${catId} .status`);
+                fetch(`/admin_panel/toggle_category_status/${catId}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            const newStatus = this.dataset.status === 'true' ? 'Inactive' : 'Active';
+                            statusCell.textContent = newStatus;
+                            this.dataset.status = this.dataset.status === 'true' ? 'false' : 'true';
+                        } else {
+                            alert('Failed to toggle status');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to toggle status');
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

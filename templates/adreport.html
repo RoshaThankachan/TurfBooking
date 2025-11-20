@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adreport.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers"><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports" class="active"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Reports</h1>
+            <div class="top-right">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="notification-badge">
+                    <i class="far fa-bell"></i>
+                </div>
+                <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="user-profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="container">
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-title">Total Bookings (All Time)</div>
+                    <div class="metric-value" id="totalBookingsValue">{{ total_bookings }}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Total Revenue (All Time)</div>
+                    <div class="metric-value" id="totalRevenueValue">₹{{ total_revenue }}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Average Booking Value</div>
+                    <div class="metric-value" id="avgBookingValue">₹{{ "{:.2f}".format(avg_booking_value) }}</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Monthly Booking Analytics</div>
+                    <div class="chart-controls">
+                        <button class="chart-type-btn active" data-type="line">Line</button>
+                        <button class="chart-type-btn" data-type="bar">Bar</button>
+                        <button class="chart-type-btn" data-type="area">Area</button>
+                    </div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="monthlyBookingsChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color bookings-color"></div>
+                        <span>Total Bookings</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color amount-color"></div>
+                        <span>Total Amount (₹)</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="section">
+                <h2>Monthly Summary</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Bookings</th>
+                            <th>Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in monthly_bookings %}
+                        <tr>
+                            <td><a href="?month={{ booking.month }}">{{ booking.month }}</a></td>
+                            <td>{{ booking.total_bookings }}</td>
+                            <td>₹{{ booking.total_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if selected_month %}
+            <div class="section">
+                <h2>Bookings for {{ selected_month }}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer ID</th>
+                            <th>Turf ID</th>
+                            <th>Booking Date</th>
+                            <th>Play Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Total Hours</th>
+                            <th>Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in detailed_bookings %}
+                        <tr>
+                            <td>{{ booking.booking_id }}</td>
+                            <td>{{ booking.cust_id }}</td>
+                            <td>{{ booking.turf_id }}</td>
+                            <td>{{ booking.booking_datetime }}</td>
+                            <td>{{ booking.play_date }}</td>
+                            <td>{{ booking.start_time }}</td>
+                            <td>{{ booking.end_time }}</td>
+                            <td>{{ booking.total_hours }}</td>
+                            <td>₹{{ booking.total_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const monthlyBookingsData = {{ monthly_bookings | tojson }};
+
+        let currentChart = null;
+        let currentChartType = 'line';
+
+        function renderChart() {
+            const ctx = document.getElementById('monthlyBookingsChart').getContext('2d');
+
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            const labels = monthlyBookingsData.map(item => item.month);
+            const totalBookings = monthlyBookingsData.map(item => item.total_bookings);
+            const totalAmounts = monthlyBookingsData.map(item => item.total_amount);
+
+            const datasets = [
+                {
+                    label: 'Total Bookings',
+                    data: totalBookings,
+                    borderColor: 'rgba(54, 162, 235, 0.8)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Total Amount (₹)',
+                    data: totalAmounts,
+                    borderColor: 'rgba(75, 192, 192, 0.8)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    yAxisID: 'y1'
+                }
+            ];
+
+            if (currentChartType === 'area') {
+                datasets[0].fill = true;
+                datasets[1].fill = true;
+            }
+
+            currentChart = new Chart(ctx, {
+                type: currentChartType === 'area' ? 'line' : currentChartType,
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.datasetIndex === 1) {
+                                        label += '₹' + context.raw.toLocaleString();
+                                    } else {
+                                        label += context.raw;
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Total Bookings'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Total Amount (₹)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setupChartTypeButtons() {
+            const buttons = document.querySelectorAll('.chart-type-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentChartType = this.getAttribute('data-type');
+                    renderChart();
+                });
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupChartTypeButtons();
+            renderChart();
+        });
+    </script>
+</body>
+</html>

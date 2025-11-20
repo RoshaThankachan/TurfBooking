@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/tregister_turf.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <div class="badge">3</div>
+                </div>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                    <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <div class="registration-container">
+                <h2>Turf Registration</h2>
+                <form method="POST" action="/owner/register_turf" enctype="multipart/form-data">
+                    <input type="text" name="turf_name" placeholder="Turf Name" required><br>
+                    <input type="tel" name="turf_phno" placeholder="Phone Number" required><br>
+                    <input type="text" name="turf_address" placeholder="Address" required><br>
+                    <input type="text" name="turf_street" placeholder="Street" required><br>
+                    <input type="text" name="turf_dist" placeholder="District" required><br>
+                    <input type="number" name="turf_pin" placeholder="Pin Code" required><br>
+                    <input type="number" name="price_per_hour" placeholder="Price per Hour" step="0.01" required><br>
+                    <label for="turf_opening_time">Opening Time:</label>
+                    <input type="time" id="turf_opening_time" name="turf_opening_time" required><br>
+                    
+                    <label for="turf_closing_time">Closing Time:</label>
+                    <input type="time" id="turf_closing_time" name="turf_closing_time" required><br>
+                    <textarea name="turf_desc" placeholder="Description" rows="1"></textarea><br>
+                    <div class="form-group">
+                        <label for="turf_images">Turf Images:</label>
+                        <input type="file" id="turf_images" name="turf_images" multiple accept=".jpg,.jpeg,.png">
+                        <small>You can select multiple images by holding CTRL while selecting files.</small>
+                    </div>
+                    <div id="category-container">
+                        <div class="category-group">
+                            <select name="cat_id[]" class="cat_id" required>
+                                <option value="" disabled selected>Select Category</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.cat_id }}">{{ category.cat_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="suggest-category">Suggest a new category</span>
+                            <div class="subcategory-container">
+                                <div class="subcategories">
+                                    {% for subcategory in subcategories %}
+                                        <label data-category="{{ subcategory.cat_id }}" style="display: none;">
+                                            <input type="checkbox" name="sub_ids[0][]" value="{{ subcategory.sub_id }}"> {{ subcategory.sub_name }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <span class="suggest-subcategory">Suggest a new subcategory</span>
+                            <button type="button" class="add-category-btn">ADD CATEGORY +</button>
+                        </div>
+                    </div>
+                    <div class="warning">Category already selected!</div>
+                    <button type="submit">Register Turf</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Suggest Category Modal -->
+    <div class="modal" id="suggest-category-modal">
+        <div class="modal-header">
+            <h4>Suggest a New Category</h4>
+            <button type="button" id="close-category-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="new-category-name" placeholder="New Category Name" required>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="submit-new-category">Submit</button>
+        </div>
+    </div>
+
+    <!-- Suggest Subcategory Modal -->
+    <div class="modal" id="suggest-subcategory-modal">
+        <div class="modal-header">
+            <h4>Suggest a New Subcategory</h4>
+            <button type="button" id="close-subcategory-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="new-subcategory-name" placeholder="New Subcategory Name" required>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="submit-new-subcategory">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let categoryIndex = 1;
+            const categoryContainer = document.getElementById('category-container');
+            const warning = document.querySelector('.warning');
+
+            function addCategoryGroup() {
+                const newCategoryGroup = document.querySelector('.category-group').cloneNode(true);
+                const newCategorySelect = newCategoryGroup.querySelector('.cat_id');
+                const newSubcategories = newCategoryGroup.querySelector('.subcategories');
+
+                newCategorySelect.name = `cat_id[]`;
+                newSubcategories.querySelectorAll('input').forEach(input => {
+                    input.name = `sub_ids[${categoryIndex}][]`;
+                    input.checked = false;
+                });
+
+                newCategorySelect.addEventListener('change', handleCategoryChange);
+
+                categoryIndex++;
+                categoryContainer.appendChild(newCategoryGroup);
+            }
+
+            function handleCategoryChange() {
+                const selectedCategories = Array.from(document.querySelectorAll('.cat_id')).map(select => select.value);
+                const currentCategory = this.value;
+
+                if (selectedCategories.filter(cat => cat === currentCategory).length > 1) {
+                    warning.style.display = 'block';
+                } else {
+                    warning.style.display = 'none';
+                }
+
+                const subcategoryLabels = this.closest('.category-group').querySelectorAll('.subcategories label');
+                subcategoryLabels.forEach(label => {
+                    if (label.getAttribute('data-category') == currentCategory) {
+                        label.style.display = 'block';
+                    } else {
+                        label.style.display = 'none';
+                    }
+                });
+            }
+
+            document.querySelector('.add-category-btn').addEventListener('click', addCategoryGroup);
+
+            document.querySelectorAll('.cat_id').forEach(select => {
+                select.addEventListener('change', handleCategoryChange);
+            });
+
+            // Modal functionality for Category
+            const suggestCategoryBtn = document.querySelectorAll('.suggest-category');
+            const categoryModal = document.getElementById('suggest-category-modal');
+            const closeCategoryModalBtn = document.getElementById('close-category-modal');
+            const submitNewCategoryBtn = document.getElementById('submit-new-category');
+            const newCategoryNameInput = document.getElementById('new-category-name');
+
+            suggestCategoryBtn.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    categoryModal.classList.add('active');
+                });
+            });
+
+            closeCategoryModalBtn.addEventListener('click', function() {
+                categoryModal.classList.remove('active');
+            });
+
+            submitNewCategoryBtn.addEventListener('click', function() {
+                const newCategoryName = newCategoryNameInput.value.trim();
+                if (newCategoryName) {
+                    // Handle the new category suggestion (e.g., send to server)
+                    // For now, just log it to the console
+                    console.log('New Category Suggested:', newCategoryName);
+                    categoryModal.classList.remove('active');
+                    newCategoryNameInput.value = '';
+                }
+            });
+
+            // Modal functionality for Subcategory
+            const suggestSubcategoryBtn = document.querySelectorAll('.suggest-subcategory');
+            const subcategoryModal = document.getElementById('suggest-subcategory-modal');
+            const closeSubcategoryModalBtn = document.getElementById('close-subcategory-modal');
+            const submitNewSubcategoryBtn = document.getElementById('submit-new-subcategory');
+            const newSubcategoryNameInput = document.getElementById('new-subcategory-name');
+
+            suggestSubcategoryBtn.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    subcategoryModal.classList.add('active');
+                });
+            });
+
+            closeSubcategoryModalBtn.addEventListener('click', function() {
+                subcategoryModal.classList.remove('active');
+            });
+
+            submitNewSubcategoryBtn.addEventListener('click', function() {
+                const newSubcategoryName = newSubcategoryNameInput.value.trim();
+                if (newSubcategoryName) {
+                    // Handle the new subcategory suggestion (e.g., send to server)
+                    // For now, just log it to the console
+                    console.log('New Subcategory Suggested:', newSubcategoryName);
+                    subcategoryModal.classList.remove('active');
+                    newSubcategoryNameInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

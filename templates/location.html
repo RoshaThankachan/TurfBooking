@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Location - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/location.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>          
+            <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link active">HOME</a></li>
+            <li><a href="/hturfs" class="nav-link">TURFS</a></li>
+            <li><a href="#about" class="nav-link">ABOUT US</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="container">
+        <h1>Select Your Preferred Location</h1>
+        <div class="location-grid">
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Thiruvananthapuram') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Thiruvananthapuram</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Kollam') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Kollam</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Pathanamthitta') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Pathanamthitta</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Alappuzha') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Alappuzha</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Kottayam') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Kottayam</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Idukki') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Idukki</2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Ernakulam') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Ernakulam</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Thrissur') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Thrissur</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Palakkad') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Palakkad</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Malappuram') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Malappuram</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Kozhikode') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Kozhikode</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Wayanad') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Wayanad</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Kannur') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Kannur</h2>
+            </div>
+            <div class="location-card" onclick="window.location.href='{{ url_for('main.turfs_by_district', district='Kasaragod') }}'">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Kasaragod</h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

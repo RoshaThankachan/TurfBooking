@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Management - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/admsg.css') }}" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages" class="active"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title"> Message Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+           
+            <form action="{{ url_for('main.admin_messages') }}" method="post">
+                <div class="form-group">
+                    <label for="sender_name">Sender Name:</label>
+                    <input type="text" id="sender_name" name="sender_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="sender_email">Sender Email:</label>
+                    <input type="email" id="sender_email" name="sender_email" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipient">Recipient:</label>
+                    <input type="text" id="recipient" name="recipient" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Message:</label>
+                    <textarea id="content" name="content" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Recipient</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                        <tr class="message-row {{ 'unread' if message.is_unread else '' }}" data-message-id="{{ message.id }}">
+                            <td>{{ message.sender_name }}</td>
+                            <td>{{ message.recipient }}</td>
+                            <td>{{ message.subject }}</td>
+                            <td>{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</td>  <!-- Format Date -->
+                            <td>
+                                <span class="badge {{ 'badge-warning' if message.is_unread else 'badge-success' }}">
+                                    {{ 'Unread' if message.is_unread else 'Read' }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="message-details" id="details-{{ message.id }}">
+                            <td colspan="5">
+                                <p>{{ message.content }}</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.message-row').forEach(row => {
+            row.addEventListener('click', function() {
+                const messageId = this.dataset.messageId;
+                const detailsRow = document.getElementById(`details-${messageId}`);
+                detailsRow.style.display = detailsRow.style.display === 'table-row' ? 'none' : 'table-row';
+            });
+        });
+
+        
+    </script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const navbar = document.querySelector('.navbar');
+
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                navbar.style.left = 'var(--sidebar-collapsed-width)';
+            } else {
+                navbar.style.left = 'var(--sidebar-width)';
+            }
+        }
+        
+    </script>
+</body>
+</html>

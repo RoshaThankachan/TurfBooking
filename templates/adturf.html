@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Management - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adturf.css') }}" rel="stylesheet">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs" class="active"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Turf Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Basic Info</th>
+                        <th>Contact</th>
+                        <th>Location</th>
+                        <th>Categories</th>
+                        <th>Pricing</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for turf in turfs %}
+                    <tr>
+                        <td>{{ turf.turf_id }}</td>
+                        <td>
+                            <div class="info-column">
+                                <span class="turf-name">{{ turf.turf_name }}</span>
+                                <span class="owner-name">Owner: {{ turf.owner_name }}</span>
+                                {% if turf.turf_desc %}
+                                <div class="description">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>{{ turf.turf_desc }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                <span>{{ turf.turf_phno }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-info">
+                                <div class="address">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ turf.turf_address }}</span>
+                                </div>
+                                <span class="street">{{ turf.turf_street }}</span>
+                                <span class="district">{{ turf.turf_dist }}, {{ turf.turf_pin }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="category-info">
+                                <div class="main-category">
+                                    <i class="fas fa-tag"></i>
+                                    <span>{{ turf.category_name }}</span>
+                                </div>
+                                <span class="subcategory">{{ turf.subcategory_name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pricing-info">
+                                <i class="fas fa-clock"></i>
+                                <span>₹{{ turf.price_per_hour }}/hour</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge {{ 'active' if turf.status else 'inactive' }}">
+                                {{ 'Active' if turf.status else 'Inactive' }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const navbar = document.querySelector('.navbar');
+
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                navbar.style.left = 'var(--sidebar-collapsed-width)';
+            } else {
+                navbar.style.left = 'var(--sidebar-width)';
+            }
+        }
+    </script>
+</body>
+</html>

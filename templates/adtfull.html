@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Details</title>
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .details-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #4a90e2;
+        }
+
+        .details-item {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .details-label {
+            color: #666;
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .details-value {
+            color: #333;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-badge.active {
+            background-color: #e6f4ea;
+            color: #1e7e34;
+        }
+
+        .status-badge.inactive {
+            background-color: #fbe9e7;
+            color: #d32f2f;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Add this modal HTML at the end of your body tag but before the closing </body> -->
+    <div id="turfDetailsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Turf Details</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="details-grid">
+                <div class="details-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Basic Information
+                    </h3>
+                    <div class="details-item">
+                        <span class="details-label">Turf ID:</span>
+                        <span class="details-value" id="modal-turf-id"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Turf Name:</span>
+                        <span class="details-value" id="modal-turf-name"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Owner Name:</span>
+                        <span class="details-value" id="modal-owner-name"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Description:</span>
+                        <span class="details-value" id="modal-turf-desc"></span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Location Details
+                    </h3>
+                    <div class="details-item">
+                        <span class="details-label">Address:</span>
+                        <span class="details-value" id="modal-address"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Street:</span>
+                        <span class="details-value" id="modal-street"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">District:</span>
+                        <span class="details-value" id="modal-district"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Pin Code:</span>
+                        <span class="details-value" id="modal-pin"></span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-phone"></i>
+                        Contact Information
+                    </h3>
+                    <div class="details-item">
+                        <span class="details-label">Phone:</span>
+                        <span class="details-value" id="modal-phone"></span>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-tags"></i>
+                        Categories & Pricing
+                    </h3>
+                    <div class="details-item">
+                        <span class="details-label">Main Category:</span>
+                        <span class="details-value" id="modal-category"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Subcategory:</span>
+                        <span class="details-value" id="modal-subcategory"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Price per Hour:</span>
+                        <span class="details-value" id="modal-price"></span>
+                    </div>
+                    <div class="details-item">
+                        <span class="details-label">Status:</span>
+                        <span class="details-value" id="modal-status"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTurfDetails(turfId, turfName, phone, address, street, district, pin, price, status, ownerName, description, category, subcategory) {
+            // Populate modal with turf details
+            document.getElementById('modal-turf-id').textContent = turfId;
+            document.getElementById('modal-turf-name').textContent = turfName;
+            document.getElementById('modal-owner-name').textContent = ownerName;
+            document.getElementById('modal-phone').textContent = phone;
+            document.getElementById('modal-address').textContent = address;
+            document.getElementById('modal-street').textContent = street;
+            document.getElementById('modal-district').textContent = district;
+            document.getElementById('modal-pin').textContent = pin;
+            document.getElementById('modal-price').textContent = '₹' + price + '/hour';
+            document.getElementById('modal-turf-desc').textContent = description;
+            document.getElementById('modal-category').textContent = category;
+            document.getElementById('modal-subcategory').textContent = subcategory;
+            
+            // Set status with appropriate styling
+            const statusElement = document.getElementById('modal-status');
+            statusElement.textContent = status ? 'Active' : 'Inactive';
+            statusElement.className = 'status-badge ' + (status ? 'active' : 'inactive');
+
+            // Show modal
+            document.getElementById('turfDetailsModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('turfDetailsModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('turfDetailsModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

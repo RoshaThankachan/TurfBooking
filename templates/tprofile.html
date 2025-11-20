@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Profile</title>
+    <link href="{{ url_for('static', filename='css/tprofile.css') }}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <div class="badge">3</div>
+                </div>
+            <div class="profile">
+                <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+            </div>
+        </nav>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <h1>Owner Profile</h1>
+                </div>
+                
+                <div class="profile-section">
+                    <h2>Personal Information</h2>
+                    <div class="profile-item">
+                        <strong>Name</strong>
+                        <span>{{ owner.owner_fname }} {{ owner.owner_lname }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>Phone Number</strong>
+                        <span>{{ owner.owner_phno }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>Gender</strong>
+                        <span>{{ owner.owner_gender }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>Username</strong>
+                        <span>{{ owner.username }}</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Address Details</h2>
+                    <div class="profile-item">
+                        <strong>House Name</strong>
+                        <span>{{ owner.owner_housename }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>Street</strong>
+                        <span>{{ owner.owner_street }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>District</strong>
+                        <span>{{ owner.owner_dist }}</span>
+                    </div>
+                    <div class="profile-item">
+                        <strong>PIN Code</strong>
+                        <span>{{ owner.owner_pin }}</span>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('owner.edit_profile') }}" class="edit-button">Edit Profile</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

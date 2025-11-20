@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ turf.turf_name }} - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/turf_details.css') }}" rel="stylesheet">
+    <style>
+        .turf-details {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .turf-details h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .turf-details p {
+            margin: 10px 0;
+        }
+        .turf-details img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .book-now-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2575fc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group .total-amount {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>
+            <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link active">HOME</a></li>
+            <li><a href="/hturfs" class="nav-link">TURFS</a></li>
+            <li><a href="#about" class="nav-link">ABOUT US</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="turf-details">
+            <h1>{{ turf.turf_name }}</h1>
+            <p><strong>Address:</strong> {{ turf.turf_address }}</p>
+            <p><strong>Street:</strong> {{ turf.turf_street }}</p>
+            <p><strong>District:</strong> {{ turf.turf_dist }}</p>
+            <p><strong>Pin Code:</strong> {{ turf.turf_pin }}</p>
+            <p><strong>Phone:</strong> {{ turf.turf_phno }}</p>
+            <p><strong>Rate:</strong> ₹{{ turf.price_per_hour }} per hour</p>
+            <p><strong>Description:</strong> {{ turf.turf_desc }}</p>
+            <div id="image-container">
+                {% if images_base64 %}
+                    <img id="slideshow-image" src="data:image/png;base64,{{ images_base64[0] }}" alt="Turf Image">
+                {% else %}
+                    <p>No images available.</p>
+                {% endif %}
+            </div>
+            
+            <script>
+                let images = {{ images_base64 | tojson }};
+                let index = 0;
+                let imgElement = document.getElementById("slideshow-image");
+            
+                function changeImage() {
+                    if (images.length > 1) {
+                        index = (index + 1) % images.length;
+                        imgElement.src = "data:image/png;base64," + images[index];
+                    }
+                }
+            
+                setInterval(changeImage, 1000); // Change every 1 second
+            </script>
+            
+            
+        
+        
+            <a href="#" class="book-now-btn" id="book-now-btn">Book Now</a>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Book Now</h2>
+            <form action="{{ url_for('main.book_turf', turf_id=turf.turf_id) }}" method="POST">
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select a Category</option>
+                        {% for category in turf.categories %}
+                            <option value="{{ category.cat_id }}">{{ category.cat_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subcategory">Subcategory:</label>
+                    <select id="subcategory" name="subcategory" required>
+                        <option value="">Select a Subcategory</option>
+                        {% for subcategory in turf.subcategories %}
+                            <option value="{{ subcategory.sub_id }}">{{ subcategory.sub_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="booking_date">Booking Date:</label>
+                    <select id="booking_date" name="booking_date" required>
+                        <!-- Dates will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="start_time">Start Time:</label>
+                    <input type="time" id="start_time" name="start_time" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_time">End Time:</label>
+                    <input type="time" id="end_time" name="end_time" required>
+                </div>
+                <div class="form-group">
+                    <label for="special_requests">Special Requests:</label>
+                    <textarea id="special_requests" name="special_requests"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Total Amount:</label>
+                    <p class="total-amount" id="total_amount">₹0.00</p>
+                </div>
+                <button type="submit" class="book-now-btn">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("book-now-btn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // Price per hour (passed from the server-side)
+        var pricePerHour = {{ turf.price_per_hour }};
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+            populateBookingDates();
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Function to populate booking dates
+        function populateBookingDates() {
+            var select = document.getElementById("booking_date");
+            select.innerHTML = ""; // Clear existing options
+
+            var currentDate = new Date();
+            for (var i = 0; i < 7; i++) {
+                var option = document.createElement("option");
+                var date = new Date(currentDate);
+                date.setDate(currentDate.getDate() + i);
+                option.value = date.toISOString().split('T')[0];
+                option.text = date.toDateString();
+                select.appendChild(option);
+            }
+        }
+
+        // Function to calculate total amount
+        function calculateTotalAmount() {
+            var startTime = document.getElementById("start_time").value;
+            var endTime = document.getElementById("end_time").value;
+
+            if (startTime && endTime) {
+                var start = new Date("1970-01-01T" + startTime + "Z");
+                var end = new Date("1970-01-01T" + endTime + "Z");
+                var diffInHours = (end - start) / 36e5; // Convert milliseconds to hours
+
+                if (diffInHours > 0) {
+                    var totalAmount = diffInHours * pricePerHour;
+                    document.getElementById("total_amount").textContent = "₹" + totalAmount.toFixed(2);
+                } else {
+                    document.getElementById("total_amount").textContent = "₹0.00";
+                }
+            }
+        }
+
+        // Event listeners for time inputs
+        document.getElementById("start_time").addEventListener("change", calculateTotalAmount);
+        document.getElementById("end_time").addEventListener("change", calculateTotalAmount);
+
+        
+    </script>
+</body>
+</html>

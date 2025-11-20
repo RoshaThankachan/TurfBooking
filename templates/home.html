@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Turf Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/home.css') }}" rel="stylesheet">
+</head>
+<body id="top">
+
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-futbol state-icon"></i>
+            <span class="logo-text">TurfBooking</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#top" class="nav-link active">HOME</a></li>
+            <li><a href="#about" class="nav-link">ABOUT US</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+            {% if session.get('login_type') == 'customer' %}
+                <li><a href="/profile" class="nav-link">PROFILE</a></li>
+            {% endif %}
+            <li><a href="/login" class="nav-link login-btn">LOGIN</a></li>
+            <li><a href="/logout" class="nav-link logout-btn">LOGOUT</a></li>
+        </ul>
+    </nav>
+
+    <div class="video-container">
+        <video autoplay muted loop>
+            <source src="{{ url_for('static', filename='video/turf.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="overlay">
+            <h1 class="main-title">Welcome to Sports Turf Booking</h1>
+            <p class="subtitle">Experience the best sports facilities in town</p>
+            <a href="{% if session.get('login_type') == 'customer' %}{{ url_for('main.location') }}{% else %}{{ url_for('main.login', next='location') }}{% endif %}" class="cta-button">Book Now</a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <i class="fas fa-users stat-icon"></i>
+            <p><strong>Number of Users</strong></p>
+            <p class="stat-value counter">{{ customer_count }}+</p>
+        </div>
+        
+        <div class="stat-item">
+            <i class="fas fa-futbol stat-icon"></i>
+            <p><strong>Number of Turfs</strong></p>
+            <p class="stat-value counter">{{ turf_count }}+</p>
+        </div>
+        
+        <div class="stat-item">
+            <i class="fas fa-map-marked-alt stat-icon"></i>
+            <p><strong>Number of Districts</strong></p>
+            <p class="stat-value counter">{{ district_count }}</p>
+        </div>
+        
+        <div class="stat-item">
+            <i class="fas fa-basketball-ball stat-icon"></i>
+            <p><strong>Sports Available</strong></p>
+            <p class="stat-value counter">{{ sports_count }}</p>
+        </div>
+        
+    </div>
+    <div class="search-container">
+        <div class="search-section">
+            <input type="text" id="search-input" class="search-input" placeholder="Search for turfs...">
+            <select id="category-select" class="search-select">
+                <option value="" disabled selected>Select Sport</option>
+                {% for category in categories %}
+                    <option value="{{ category.cat_name }}">{{ category.cat_name }}</option>
+                {% endfor %}
+            </select>
+            <select id="location-select" class="search-select">
+                <option value="" disabled selected>Select Location</option>
+                {% for location in locations %}
+                    <option value="{{ location[0] }}">{{ location[0] }}</option>
+                {% endfor %}
+            </select>
+            <button id="search-button" class="search-button">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("search-button").addEventListener("click", function () {
+            let searchInput = document.getElementById("search-input").value;
+            let category = document.getElementById("category-select").value;
+            let location = document.getElementById("location-select").value;
+    
+            // Construct the search URL
+            let searchUrl = `/search?query=${encodeURIComponent(searchInput)}&category=${encodeURIComponent(category)}&location=${encodeURIComponent(location)}`;
+    
+            // Redirect to search results
+            window.location.href = searchUrl;
+        });
+    </script>
+    
+
+    <h2 class="section-title">Featured Turfs</h2>
+    <div class="turf-container">
+        {% for turf in turfs %}
+        <div class="property-card">
+            <div class="property-image-container">
+                {% if turf.turf_image %}
+                    <img src="data:image/jpeg;base64,{{ turf.turf_image }}" alt="{{ turf.turf_name }}" class="property-image">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/default_turf.jpg') }}" alt="Default Turf Image" class="property-image">
+                {% endif %}
+            </div>
+            
+            <div class="property-details">
+                <span class="property-type">{{ turf.turf_name }}</span>
+                <span class="property-price">₹{{ turf.price_per_hour }}/hr</span>
+                <h3 class="property-address">{{ turf.turf_address }}</h3>
+                <div class="property-features">
+                    {% for feature in turf.features %}
+                    <span><i class="fas fa-futbol"></i> {{ feature }}</span>
+                    {% endfor %}
+                </div>
+                <a href="#" class="schedule-btn">Book Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="browse-more-container">
+        <a href="{{ url_for('main.location') }}"  class="browse-more-btn">Browse More Turfs</a>
+    </div>
+
+
+    <div class="about-section" id="about">
+        <h2 class="section-title">About Us</h2>
+        <div class="about-content">
+            <p>Sports Turf Booking is a premier online platform that connects sports enthusiasts with top-notch turfs across various locations. Whether you're a footballer, cricketer, or a badminton lover, we provide a seamless booking experience to ensure you get the best facilities at your convenience.</p>
+            <p>Our mission is to make sports accessible to everyone by simplifying the booking process and offering reliable and affordable options. With a growing network of high-quality turfs, we strive to provide the best customer experience for both players and turf owners.</p>
+            <p>Join us today and take your game to the next level!</p>
+        </div>
+    </div>
+
+    <div class="contact-page section" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="section-heading">
+                    <h2>Get In Touch With Us</h2>
+                    <p>Have questions? We're here to help you find the perfect turf for your game.</p>
+                </div>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h6>+91 8479076890</h6>
+                            <span>Phone Number</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h6>info@turfbooking.com</h6>
+                            <span>Email Address</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form id="contact-form" class="contact-form" action="/send-email" method="POST">
+    <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required>
+    </div>
+    <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+    </div>
+    <button type="submit" class="submit-btn">Send Message</button>
+</form>
+
+
+        </div>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+
+        // Stats counter animation
+        const counterElements = document.querySelectorAll('.counter');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.innerText);
+                    let count = 0;
+                    const duration = 2000;
+                    const increment = target / (duration / 16);
+                    
+                    const updateCount = () => {
+                        count += increment;
+                        if (count < target) {
+                            entry.target.innerText = Math.ceil(count) + '+';
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            entry.target.innerText = target + '+';
+                        }
+                    };
+                    
+                    requestAnimationFrame(updateCount);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counterElements.forEach(el => observer.observe(el));
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

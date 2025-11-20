@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/addash.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-icons">
+            <div class="notification-badge">
+                <a href="/admin_panel/notifications">
+                    <i class="far fa-bell"></i>
+                </a>
+            </div>
+            <div class="profile">
+                <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                <span>ADMIN</span>
+            </div>
+        </div>
+    </nav>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul>
+            <li><a href="{{ url_for('admin_bp.dashboard') }}"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <li><a href="{{ url_for('admin_bp.view_customers') }}"><i class="fas fa-users"></i><span>Customers</span></a></li>
+            <li><a href="{{ url_for('admin_bp.view_turf_owners') }}"><i class="fas fa-user-tie"></i><span>Turf Owners</span></a></li>
+            <li><a href="{{ url_for('admin_bp.list_turfs') }}"><i class="fas fa-futbol"></i><span>Turfs</span></a></li>
+            <li><a href="{{ url_for('admin_bp.view_categories') }}"><i class="fas fa-list"></i><span>Categories</span></a></li>
+            <li><a href="{{ url_for('admin_bp.view_subcategories') }}"><i class="fas fa-list-alt"></i><span>Subcategories</span></a></li>
+            <li><a href="{{ url_for('admin_bp.list_bookings') }}"><i class="fas fa-calendar-check"></i><span>Bookings</span></a></li>
+            <li><a href="{{ url_for('admin_bp.admin_messages') }}"><i class="fas fa-envelope"></i><span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        </ul>
+    </aside>
+    <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="section">
+            <h2>Notifications</h2>
+            <ul>
+                <li>
+                    <p>New booking: User John Doe booked Turf A for 2 hours</p>
+                </li>
+                <li>
+                    <p>New user registration: Jane Smith</p>
+                </li>
+                <li>
+                    <p>Turf maintenance scheduled for Turf B on July 15th</p>
+                </li>
+                <!-- Add more notifications as needed -->
+            </ul>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.container');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const navbar = document.querySelector('.navbar');
+
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
+
+            if (sidebar.classList.contains('collapsed')) {
+                navbar.style.left = 'var(--sidebar-collapsed-width)';
+            } else {
+                navbar.style.left = 'var(--sidebar-width)';
+            }
+        }
+    </script>
+</body>
+</html>

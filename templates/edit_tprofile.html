@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #28a745; /* Green for eco-friendly sports feel */
+            --secondary-color: #155724; /* Darker green */
+            --accent-color: #c3e6cb; /* Light green */
+            --text-dark: #343a40; /* Dark grey */
+            --text-light: #6c757d; /* Light grey */
+            --background-color: #f8f9fa; /* Light grey background */
+            --card-background: white;
+            --gradient-primary: linear-gradient(135deg, #28a745 0%, #155724 100%);
+            --shadow-subtle: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gradient-primary);
+            padding: 1rem 1.5rem;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 20;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-right: 2rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            perspective: 1000px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--gradient-primary);
+            padding: 2rem 0;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 60px; /* Adjust according to the height of the navbar */
+            bottom: 0;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav li {
+            list-style: none;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav li a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: white;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar-nav li a:hover::before {
+            left: 0;
+        }
+
+        .sidebar-nav li a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: var(--background-color);
+            margin-left: 260px; /* Adjust according to the width of the sidebar */
+            margin-top: 60px; /* Adjust according to the height of the navbar */
+        }
+
+        .edit-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-background);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-header {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+        
+            .sidebar {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                padding: 1rem;
+                position: static;
+            }
+        
+            .sidebar-nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="navbar">
+            <a href="/" class="logo">TurfBooking</a>
+            <ul>
+                <li><a href="/owner/dashboard">Dashboard</a></li>
+                <li><a href="/owner/register_turf">Register Turf</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <div class="edit-container">
+                <div class="form-header">
+                    <h1>Edit Profile</h1>
+                </div>
+                <form method="POST" action="{{ url_for('owner.edit_profile') }}">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" value="{{ owner.owner_fname }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" value="{{ owner.owner_lname }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" value="{{ owner.owner_phno }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>House Name</label>
+                        <input type="text" name="house_name" value="{{ owner.owner_housename }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Street</label>
+                        <input type="text" name="street" value="{{ owner.owner_street }}">
+                    </div>
+                    <div class="form-group">
+                        <label>District</label>
+                        <input type="text" name="district" value="{{ owner.owner_dist }}">
+                    </div>
+                    <div class="form-group">
+                        <label>PIN Code</label>
+                        <input type="text" name="pin_code" value="{{ owner.owner_pin }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="Male" {% if owner.owner_gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if owner.owner_gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if owner.owner_gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-button">Update Profile</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

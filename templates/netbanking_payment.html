@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Net Banking Payment - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2575fc;
+            --primary-hover: #1b5cc5;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --success-color: #4CAF50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .bank-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 20px 0 30px;
+        }
+
+        .bank-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .bank-option:hover {
+            background-color: rgba(37, 117, 252, 0.05);
+        }
+
+        .bank-option img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: contain;
+            border: 2px solid var(--border-color);
+            padding: 5px;
+            background-color: white;
+            transition: var(--transition);
+        }
+
+        .bank-option:hover img {
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .bank-option.selected {
+            background-color: rgba(37, 117, 252, 0.1);
+        }
+
+        .bank-option.selected img {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(37, 117, 252, 0.3);
+        }
+
+        .bank-option label {
+            margin-top: 8px;
+            font-size: 14px;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 400;
+            transition: var(--transition);
+        }
+
+        .bank-option:hover label,
+        .bank-option.selected label {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .payment-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: 500;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-button:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 4px 8px rgba(37, 117, 252, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .payment-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .bank-options {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .form-group input,
+            .form-group select,
+            .payment-button {
+                padding: 10px;
+            }
+        }
+
+        /* Additional detail styling */
+        .form-note {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .bank-selection-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .payment-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .payment-secure svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            fill: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Net Banking Payment</h1>
+        
+        <div class="bank-selection-info">Select your bank to proceed with the payment</div>
+        
+        <form action="{{ url_for('main.process_netbanking_payment', booking_id=booking_id) }}" method="POST">
+            <input type="hidden" name="booking_id" value="{{ booking_id }}">
+            <input type="hidden" id="selected_bank" name="bank_name" required>
+
+            <div class="form-group">
+                <label for="bank_name">Select Bank:</label>
+                <div class="bank-options">
+                    <div class="bank-option" id="SBI" onclick="selectBank('SBI')">
+                        <img src="{{ url_for('static', filename='images/sbi.svg') }}" alt="State Bank of India logo">
+                        <label>SBI</label>
+                    </div>
+                    <div class="bank-option" id="HDFC" onclick="selectBank('HDFC')">
+                        <img src="{{ url_for('static', filename='images/hdfc.svg') }}" alt="HDFC Bank logo">
+                        <label>HDFC</label>
+                    </div>
+                    <div class="bank-option" id="ICICI" onclick="selectBank('ICICI')">
+                        <img src="{{ url_for('static', filename='images/icici.svg') }}" alt="ICICI Bank logo">
+                        <label>ICICI</label>
+                    </div>
+                    <div class="bank-option" id="Axis" onclick="selectBank('Axis')">
+                        <img src="{{ url_for('static', filename='images/axis.svg') }}" alt="Axis Bank logo">
+                        <label>Axis</label>
+                    </div>
+                    <div class="bank-option" id="PNB" onclick="selectBank('PNB')">
+                        <img src="{{ url_for('static', filename='images/pnb.svg') }}" alt="Punjab National Bank logo">
+                        <label>PNB</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="account_number">Account Number:</label>
+                <input type="text" id="account_number" name="account_number" placeholder="Enter your account number" required>
+                <div class="form-note">Enter the account number associated with your bank account</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ifsc_code">IFSC Code:</label>
+                <input type="text" id="ifsc_code" name="ifsc_code" placeholder="Enter bank IFSC code" required>
+                <div class="form-note">The 11-digit code that identifies your bank branch</div>
+            </div>
+            
+            <button type="submit" class="payment-button">Pay Now</button>
+            
+            <div class="payment-secure">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
+                <span>Secure payment gateway. Your information is encrypted and secure.</span>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function selectBank(bank) {
+            document.getElementById('selected_bank').value = bank;
+            let options = document.querySelectorAll('.bank-option');
+            options.forEach(option => option.classList.remove('selected'));
+            document.getElementById(bank).classList.add('selected');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPay UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0F62FE; /* Google Pay blue background */
+            color: white;
+            text-align: center;
+            flex-direction: column;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 450px; /* Enlarged container */
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px; /* Increased padding */
+            color: black;
+        }
+        .profile-symbol {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #007aff;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px auto;
+        }
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .phone {
+            color: gray;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .amount {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: black;
+        }
+        .pay-btn {
+            display: block;
+            width: 100%;
+            background: #007aff;
+            color: white;
+            font-size: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .pay-btn:hover {
+            background: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Payment to Google Pay</h2>
+        <p>Secure UPI Payment</p>
+    </div>
+    <div class="container">
+        <div class="profile-symbol">{{ first_letter }}</div>
+        <div class="name">Paying {{ full_name }}</div>
+        <div class="phone">+91 {{ masked_phone }}</div>
+        <div class="amount">₹{{ amount }}</div>
+        <a href="{{ url_for('main.gpay', booking_id=booking_id) }}">
+            <img src="{{ url_for('static', filename='images/google-pay-logo.svg') }}" alt="GPAY" class="property-image" style="width: 200px;">
+        </a>
+        
+        <form action="{{ url_for('main.process_gpay_payment', booking_id=booking_id) }}" method="POST">
+            <button type="submit" class="pay-btn">Proceed to Pay</button>
+        </form>
+    </div>
+</body>
+</html>

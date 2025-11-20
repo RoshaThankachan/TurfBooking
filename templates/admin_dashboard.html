@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/addash.css') }}" rel="stylesheet">
+
+  
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-futbol"></i>
+            <span>TurfBooking</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/admin_panel/dashboard" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+            <li><a href="/admin_panel/customers"><i class="fas fa-users"></i> <span>Customers</span></a></li>
+            <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+            <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+            <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+            <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+            <li><a href="/admin_panel/payments"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+            <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+            <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+            <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+            <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Users</div>
+                <div class="stat-value">{{ total_customers if total_customers is not none else 0 }}</div>
+                
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Turfs</div>
+                <div class="stat-value">{{ total_turfs if total_turfs is not none else 0 }}</div>
+                
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Bookings</div>
+                <div class="stat-value">{{ total_bookings if total_bookings is not none else 0 }}</div>
+                
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Revenue</div>
+                <div class="stat-value">${{ total_revenue if total_revenue is not none else 0 }}</div>
+                
+            </div>
+        </div>
+       <!-- Two-column layout for New Customers and Top Turfs -->
+
+      
+
+       <!-- Two-column layout for New Customers and Top Turfs -->
+<!-- New User Section -->
+<div class="card">
+    <div class="card-title">
+        New Customers
+        <a href="/admin_panel/customers" class="view-all">View All</a>
+    </div>
+    <div class="new-customers">
+        <h3>New Customers</h3>
+        {% if new_customers %}
+            <ul>
+                {% for customer in new_customers %}
+                    <li>{{ customer['name'] }} - {{ customer['email'] }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No new customers to display</p>
+        {% endif %}
+    </div>
+    
+</div>
+    
+   <!-- Top Turfs Section -->
+<div class="card">
+    <div class="card-title">
+        Top Turfs
+        <a href="/admin_panel/turfs" class="view-all">View All</a>
+    </div>
+    <div class="product-list">
+        {% for turf in top_turfs %}
+        <div class="product-item">
+            <div class="product-info">
+                <div class="product-image">
+                    {% if turf.turf_image %}
+                    <img src="{{ url_for('static', filename='uploads/turfs/' + turf.turf_image) }}" alt="{{ turf.turf_name }}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/default-turf.png') }}" alt="Turf">
+                    {% endif %}
+                </div>
+                <div class="product-details">
+                    <h4>{{ turf.turf_name }}</h4>
+                    <p>{{ turf.turf_dist }}</p>
+                    <div class="product-price">${{ turf.price_per_hour }}</div>
+                </div>
+            </div>
+            <div class="product-stats">
+                <div class="stat-row">
+                    <span>Bookings:</span>
+                    <span>{{ turf.total_bookings }}</span>
+                </div>
+                <div class="stat-row">
+                    <span>Revenue:</span>
+                    <span>${{ turf.total_revenue|round(2) }}</span>
+                </div>
+                <div class="stat-row">
+                    <span>ID:</span>
+                    <span>{{ turf.turf_id }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if not top_turfs %}
+        <div class="no-data-message">
+            <p>No turf data available</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+        
+        <!-- Add this JavaScript for dark mode toggle -->
+        <script>
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                
+                // Store preference in localStorage
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'enabled');
+                    document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
+                    document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('darkMode', 'disabled');
+                    document.querySelector('.dark-mode-toggle i').classList.remove('fa-sun');
+                    document.querySelector('.dark-mode-toggle i').classList.add('fa-moon');
+                }
+            }
+            
+            // Check for saved preference when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                if (localStorage.getItem('darkMode') === 'enabled') {
+                    document.body.classList.add('dark-mode');
+                    document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
+                    document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
+                }
+            });
+        </script>
+       
+        
+        <!-- Revenue Chart -->
+        <div class="card">
+            <div class="card-title">
+                Revenue Growth
+                <span class="legend-item">
+                    <span class="legend-color legend-primary"></span>
+                    Booking Revenue
+                </span>
+                <span class="legend-item">
+                    <span class="legend-color legend-secondary"></span>
+                    Marketing Sale
+                </span>
+            </div>
+            
+            <svg class="revenue-chart" viewBox="0 0 800 250">
+                <!-- X-axis -->
+                <line x1="40" y1="220" x2="760" y2="220" stroke="#e9ecef" stroke-width="1"/>
+                
+                <!-- Y-axis -->
+                <line x1="40" y1="20" x2="40" y2="220" stroke="#e9ecef" stroke-width="1"/>
+                
+                <!-- X-axis labels -->
+                <text x="70" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Jan</text>
+                <text x="130" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Feb</text>
+                <text x="190" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Mar</text>
+                <text x="250" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Apr</text>
+                <text x="310" y="240" text-anchor="middle" font-size="12" fill="#6c757d">May</text>
+                <text x="370" y="240" text-anchor="middle" font-size="12" fill="#6c757d">June</text>
+                <text x="430" y="240" text-anchor="middle" font-size="12" fill="#6c757d">July</text>
+                <text x="490" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Aug</text>
+                <text x="550" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Sep</text>
+                <text x="610" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Oct</text>
+                <text x="670" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Nov</text>
+                <text x="730" y="240" text-anchor="middle" font-size="12" fill="#6c757d">Dec</text>
+                
+                <!-- Y-axis labels -->
+                <text x="30" y="220" text-anchor="end" font-size="12" fill="#6c757d">0</text>
+                <text x="30" y="170" text-anchor="end" font-size="12" fill="#6c757d">50k</text>
+                <text x="30" y="120" text-anchor="end" font-size="12" fill="#6c757d">100k</text>
+                <text x="30" y="70" text-anchor="end" font-size="12" fill="#6c757d">150k</text>
+                <text x="30" y="20" text-anchor="end" font-size="12" fill="#6c757d">200k</text>
+                
+                <!-- Grid lines -->
+                <line x1="40" y1="170" x2="760" y2="170" stroke="#e9ecef" stroke-width="1" stroke-dasharray="5,5"/>
+                <line x1="40" y1="120" x2="760" y2="120" stroke="#e9ecef" stroke-width="1" stroke-dasharray="5,5"/>
+                <line x1="40" y1="70" x2="760" y2="70" stroke="#e9ecef" stroke-width="1" stroke-dasharray="5,5"/>
+                <line x1="40" y1="20" x2="760" y2="20" stroke="#e9ecef" stroke-width="1" stroke-dasharray="5,5"/>
+                
+                <!-- Primary line (Booking Revenue) -->
+                <path class="chart-line primary-line" d="M70,180 L130,170 L190,165 L250,150 L310,140 L370,120 L430,100 L490,80 L550,90 L610,70 L670,100 L730,80" />
+                
+                <!-- Secondary line (Marketing Sale) -->
+                <path class="chart-line secondary-line" d="M70,200 L130,190 L190,195 L250,180 L310,190 L370,185 L430,175 L490,180 L550,190 L610,180 L670,195 L730,185" />
+                
+                <!-- Data points for primary line -->
+                <circle class="chart-dot chart-dot-primary" cx="70" cy="180" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="130" cy="170" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="190" cy="165" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="250" cy="150" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="310" cy="140" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="370" cy="120" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="430" cy="100" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="490" cy="80" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="550" cy="90" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="610" cy="70" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="670" cy="100" r="4"/>
+                <circle class="chart-dot chart-dot-primary" cx="730" cy="80" r="4"/>
+                
+                <!-- Data points for secondary line -->
+                <circle class="chart-dot chart-dot-secondary" cx="70" cy="200" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="130" cy="190" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="190" cy="195" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="250" cy="180" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="310" cy="190" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="370" cy="185" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="430" cy="175" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="490" cy="180" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="550" cy="190" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="610" cy="180" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="670" cy="195" r="4"/>
+                <circle class="chart-dot chart-dot-secondary" cx="730" cy="185" r="4"/>
+            </svg>
+        </div>
+
+        <!-- Two-column layout -->
+        <div class="grid-row">
+            <!-- Upgrade Card -->
+            <div class="card">
+                <div style="background: linear-gradient(to right, #0e7c6b, #11998e); color: white; border-radius: var(--border-radius); padding: 1.5rem; position: relative; overflow: hidden;">
+                    <h3>Boost up your revenue</h3>
+                    <p style="margin: 0.75rem 0 1.5rem; opacity: 0.8; font-size: 0.9rem;">By upgrading your account you can get more bookings and increase your earnings.</p>
+                    <button style="background-color: white; color: var(--primary); border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; cursor: pointer;">Upgrade Now</button>
+                    
+                    <!-- Abstract shapes -->
+                    <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; background-color: rgba(255,255,255,0.1);"></div>
+                    <div style="position: absolute; bottom: -30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; background-color: rgba(255,255,255,0.05);"></div>
+                </div>
+            </div>
+
+            <!-- Deliveries Card -->
+            <div class="card">
+                <div class="card-title">
+                    Deliveries
+                    <i class="fas fa-ellipsis-h" style="color: var(--gray-500); cursor: pointer;"></i>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <p style="margin-bottom: 1rem; color: var(--gray-600); font-size: 0.9rem;">This day statistics</p>
+                    
+                    <div style="padding: 1rem 0; border-radius: var(--border-radius); margin-bottom: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.9rem; color: var(--gray-700);">On Time Delivery</span>
+                            <span style="font-size: 0.9rem; color: var(--gray-700); font-weight: 500;">85%</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 1rem 0; border-radius: var(--border-radius);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.9rem; color: var(--gray-700);">Delayed Delivery</span>
+                            <span style="font-size: 0.9rem; color: var(--gray-700); font-weight: 500;">15%</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar progress-secondary" style="width: 15%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div

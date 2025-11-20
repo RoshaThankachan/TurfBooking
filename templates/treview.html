@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Reviews Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/treview.css') }}" rel="stylesheet">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                    <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                
+            </header>
+
+            <div class="reviews-controls">
+                <div class="search-box">
+                    <input type="text" placeholder="Search reviews...">
+                </div>
+                <button class="add-review-btn" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Add New Review
+                </button>
+            </div>
+
+            <div class="reviews-grid">
+                <!-- Sample Review Items -->
+                <div class="review-card">
+                    <div class="review-details">
+                        <h3>John Doe</h3>
+                        <p>Great turf! Had an amazing experience.</p>
+                    </div>
+                    <div class="review-actions">
+                        <button class="action-btn edit-btn" onclick="openModal()">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteReview(this)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-details">
+                        <h3>Jane Smith</h3>
+                        <p>Good facilities and well maintained.</p>
+                    </div>
+                    <div class="review-actions">
+                        <button class="action-btn edit-btn" onclick="openModal()">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteReview(this)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Review Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Add New Review</h2>
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="reviewerName">Reviewer Name</label>
+                    <input type="text" id="reviewerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviewText">Review</label>
+                    <textarea id="reviewText" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Add Review</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function openModal() {
+        document.getElementById('reviewModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('reviewModal').style.display = 'none';
+    }
+
+    function deleteReview(element) {
+        if (confirm("Are you sure you want to delete this review?")) {
+            element.closest('.review-card').remove();
+        }
+    }
+
+    document.getElementById('reviewForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        closeModal();
+    });
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('reviewModal')) {
+            closeModal();
+        }
+    }
+    </script>
+</body>
+</html>

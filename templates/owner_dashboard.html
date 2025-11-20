@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Owner Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/owner_dashboard.css') }}" rel="stylesheet">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <div class="logo">TurfBooking</div>
+            <div class="actions">
+                <div class="notification">
+                    <i class="fas fa-bell"></i>
+                    <div class="badge">3</div>
+                </div>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile" class="logo-img">
+                    <div class="name">{{ owner.owner_fname }} {{ owner.owner_lname }}</div>
+                </div>
+               
+            </div>
+        </div>
+        
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/owner/dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/owner/register_turf"><i class="fas fa-plus-circle"></i>Register Turf</a></li>
+                <li><a href="/owner/view_turfs"><i class="fas fa-list"></i>View Turfs</a></li>
+                <li><a href="/owner/bookings"><i class="fas fa-calendar-alt"></i>Bookings</a></li>
+                <li><a href="/owner/revenue"><i class="fas fa-chart-line"></i>Revenue</a></li>
+                <li><a href="/owner/messages"><i class="fas fa-envelope"></i>Messages</a></li>
+                <li><a href="/owner/tprofile"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/owner/promotions"><i class="fas fa-tags"></i>Promotions</a></li>
+                <li><a href="/owner/inventory"><i class="fas fa-boxes"></i>Inventory</a></li>
+                <li><a href="/owner/weather"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+                <li><a href="/owner/reviews"><i class="fas fa-star"></i>Reviews</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="main-content">
+            <header class="header">
+              
+                <div>Welcome, {{ owner.owner_fname }}</div>
+            </header>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Total Bookings</h3>
+                    <p>120</p>
+                </div>
+                <div class="card">
+                    <h3>Revenue</h3>
+                    <p>$5,000</p>
+                </div>
+                <div class="card">
+                    <h3>Occupancy Rate</h3>
+                    <p>75%</p>
+                </div>
+                <div class="card">
+                    <h3>Active Turfs</h3>
+                    <p>{{ turfs|length }}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Your Turfs</h2>
+                <ul class="turf-list">
+                    {% for turf in turfs %}
+                        <li>
+                            <h3>{{ turf.turf_name }}</h3>
+                            <p>{{ turf.turf_address }}, {{ turf.turf_street }}, {{ turf.turf_dist }}, {{ turf.turf_pin }}</p>
+                            <p>Phone: {{ turf.turf_phno }}</p>
+                            <p>Price per Hour: {{ turf.price_per_hour }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+
+
+            <div class="section">
+                <h2>Weather Forecast</h2>
+                <p>Current weather conditions for your turf locations.</p>
+                <div id="weather-forecast"></div>
+            </div>
+
+          
+            
+          
+        </main>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund History - TurfBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/adrefhis.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="main-content">
+        <!-- Top Bar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-futbol"></i>
+                <span>TurfBooking</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/admin_panel/dashboard" ><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
+                <li><a href="/admin_panel/customers" ><i class="fas fa-users"></i> <span>Customers</span></a></li>
+                <li><a href="/admin_panel/adto"><i class="fas fa-user-tie"></i> <span>Turf Owners</span></a></li>
+                <li><a href="/admin_panel/turfs"><i class="fas fa-futbol"></i> <span>Turfs</span></a></li>
+                <li><a href="/admin_panel/categories"><i class="fas fa-list"></i> <span>Categories</span></a></li>
+                <li><a href="/admin_panel/subcategories"><i class="fas fa-list-alt"></i> <span>Subcategories</span></a></li>
+                <li><a href="/admin_panel/bookings"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a></li>
+                <li><a href="/admin_panel/payments" class="active"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+                <li><a href="/admin_panel/revenue"><i class="fas fa-dollar-sign"></i> <span>Revenue</span></a></li>
+                <li><a href="/admin_panel/reports"><i class="fas fa-file-alt"></i> <span>Reports</span></a></li>
+                <li><a href="/admin/messages"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+            </ul>
+        </aside>
+        <div class="top-bar">
+            <h1 class="page-title">Refund History Management</h1>
+            <div class="top-right">
+                <div class="top-right">
+                    
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    
+                    <div class="notification-badge">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <img src="{{ url_for('static', filename='images/adm.png') }}" alt="Admin Profile">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="main-content">
+        <h1>Refund History</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Refund ID</th>
+                    <th>Payment ID</th>
+                    <th>Booking ID</th>
+                    <th>Customer Name</th>
+                    <th>Refund Amount</th>
+                    <th>Reason</th>
+                    <th>Refund Date</th>
+                    <th>Status</th>
+                    <th>Policy ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for refund in refunds %}
+                <tr>
+                    <td>{{ refund.refund_id }}</td>
+                    <td>{{ refund.payment_id or 'N/A' }}</td>
+                    <td>{{ refund.booking_id or 'N/A' }}</td>
+                    <td>{{ refund.cust_fname }} {{ refund.cust_lname }}</td>
+                    <td>₹{{ "%.2f"|format(refund.refund_amount) }}</td>
+                    <td>{{ refund.refund_reason }}</td>
+                    <td>{{ refund.refund_date }}</td>
+                    <td>
+                        {% if refund.refund_status %}
+                            <span class="status-success">Approved</span>
+                        {% else %}
+                            <span class="status-pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ refund.policy_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

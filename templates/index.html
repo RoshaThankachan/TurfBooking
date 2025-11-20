@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Sports Turf Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+        .background-paths {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: #0f172a;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: #0f172a;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #1e293b;
+        }
+        @keyframes pathAnimation {
+            0% {
+                stroke-dashoffset: 1000;
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="background-paths" viewBox="0 0 696 316" fill="none">
+            <title>Background Paths</title>
+        </svg>
+        <div class="content">
+            <h1>Welcome to Sports Turf Booking</h1>
+            <button class="button">Discover Excellence</button>
+        </div>
+    </div>
+
+    <script>
+        function createPath(index) {
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            const position = index % 2 === 0 ? 1 : -1;
+            const d = `M-${380 - index * 5 * position} -${189 + index * 6}C-${
+                380 - index * 5 * position
+            } -${189 + index * 6} -${312 - index * 5 * position} ${216 - index * 6} ${
+                152 - index * 5 * position
+            } ${343 - index * 6}C${616 - index * 5 * position} ${470 - index * 6} ${
+                684 - index * 5 * position
+            } ${875 - index * 6} ${684 - index * 5 * position} ${875 - index * 6}`;
+            
+            path.setAttribute("d", d);
+            path.setAttribute("stroke", "currentColor");
+            path.setAttribute("stroke-width", (0.5 + index * 0.03).toString());
+            path.setAttribute("stroke-opacity", (0.1 + index * 0.03).toString());
+            
+            path.style.animation = `pathAnimation ${20 + Math.random() * 10}s linear infinite`;
+            path.style.strokeDasharray = "1000";
+            path.style.strokeDashoffset = "1000";
+            
+            return path;
+        }
+
+        const svg = document.querySelector('.background-paths');
+        for (let i = 0; i < 36; i++) {
+            svg.appendChild(createPath(i));
+        }
+
+        // Redirect to home.html after 10 seconds
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 10000);
+    </script>
+</body>
+</html>
