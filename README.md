@@ -27,11 +27,9 @@ The project aims to simplify the turf booking process and reduce the need for ma
 
 ## 📸 Screenshots
 
-Add screenshots of the actual application here, such as:
 <img width="1520" height="2346" alt="127 0 0 1_5000_home (3)" src="https://github.com/user-attachments/assets/1d81bca8-c68d-4178-9dd0-8cef4a6d0165" />
 <img width="1516" height="770" alt="127 0 0 1_5000_home (1)" src="https://github.com/user-attachments/assets/6cdfa3e3-80ab-4848-a704-2d8fbadd7df5" />
 <img width="1515" height="768" alt="127 0 0 1_5000_home (2)" src="https://github.com/user-attachments/assets/0af4e19f-0198-41bb-8102-aadf8dfbfe36" />
-<img width="1520" height="1301" alt="127 0 0 1_5000_location" src="https://github.com/user-attachments/assets/1ec8c4c7-ffb4-4548-b847-b61e49036bea" />
 <img width="1853" height="870" alt="127 0 0 1_5000_login" src="https://github.com/user-attachments/assets/411d9122-674a-4dd7-9474-a59bd4d0ede3" />
 <img width="1843" height="869" alt="127 0 0 1_5000_owner_dashboard" src="https://github.com/user-attachments/assets/7b1f1840-90a8-40dc-9e18-9787220596da" />
 
